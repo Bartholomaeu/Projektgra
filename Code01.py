@@ -35,6 +35,25 @@ freddy_images = [pygame.image.load(f"freddy{i}.png") for i in range(2, 7)]
 freddy_images = [pygame.transform.scale(img, (120, 120)) for img in freddy_images]
 freddy_images_flipped = [pygame.transform.flip(img, True, False) for img in freddy_images]
 
+# Load toady attack fire images and scale to desired size
+toady_af_images = [pygame.image.load(f"toadyaf{i}.png") for i in range(1, 7)]
+toady_af_images = [pygame.transform.scale(img, (120, 120)) for img in toady_af_images]
+
+# Load toady attack water images and scale to desired size
+toady_aw_images = [pygame.image.load(f"toadyaw{i}.png") for i in range(1, 7)]
+toady_aw_images = [pygame.transform.scale(img, (120, 120)) for img in toady_aw_images]
+
+# Load toady attack earth images and scale to desired size
+toady_ae_images = [pygame.image.load(f"toadyae{i}.png") for i in range(1, 7)]
+toady_ae_images = [pygame.transform.scale(img, (120, 120)) for img in toady_ae_images]
+
+# Frame counter for animation
+toady_frame = 0
+freddy_frame = 0
+toady_af_frame = 0
+toady_aw_frame = 0
+toady_ae_frame = 0
+
 # Element strengths
 ELEMENT_STRENGTHS = {
     "Fire": "Earth",
@@ -118,6 +137,14 @@ def main():
     # Initialize frame counters
     toady_frame = 0
     freddy_frame = 0
+    toady_af_frame = 0
+    toady_aw_frame = 0
+    toady_ae_frame = 0
+
+    # Flags to indicate if FIRE, WATER, or EARTH animation is active
+    fire_animation_active = False
+    water_animation_active = False
+    earth_animation_active = False
 
     while running:
         screen.fill(BLACK)
@@ -153,6 +180,18 @@ def main():
                             enemy_choice = random.choice(player_deck)
                             enemy_projectile = Projectile(SCREEN_WIDTH - 200, SCREEN_HEIGHT // 2, -10,
                                                           enemy_choice.element)
+                            if card.element == "Fire":
+                                fire_animation_active = True
+                                water_animation_active = False
+                                earth_animation_active = False
+                            elif card.element == "Water":
+                                water_animation_active = True
+                                fire_animation_active = False
+                                earth_animation_active = False
+                            elif card.element == "Earth":
+                                earth_animation_active = True
+                                fire_animation_active = False
+                                water_animation_active = False
 
         # Draw health bars
         player_health_text = FONT.render(f"Player Health: {player_health}", True, WHITE)
@@ -167,11 +206,29 @@ def main():
             screen.blit(reveal_text, (20, 60))
 
         # Draw player and enemy images
-        screen.blit(toady_images[toady_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
-        screen.blit(freddy_images_flipped[freddy_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
+        if fire_animation_active:
+            screen.blit(toady_af_images[toady_af_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
+            toady_af_frame += 1
+            if toady_af_frame // 5 >= len(toady_af_images):
+                toady_af_frame = 0
+                fire_animation_active = False
+        elif water_animation_active:
+            screen.blit(toady_aw_images[toady_aw_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
+            toady_aw_frame += 1
+            if toady_aw_frame // 5 >= len(toady_aw_images):
+                toady_aw_frame = 0
+                water_animation_active = False
+        elif earth_animation_active:
+            screen.blit(toady_ae_images[toady_ae_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
+            toady_ae_frame += 1
+            if toady_ae_frame // 5 >= len(toady_ae_images):
+                toady_ae_frame = 0
+                earth_animation_active = False
+        else:
+            screen.blit(toady_images[toady_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
+            toady_frame = (toady_frame + 1) % (len(toady_images) * 5)
 
-        # Update frames for animation
-        toady_frame = (toady_frame + 1) % (len(toady_images) * 5)
+        screen.blit(freddy_images_flipped[freddy_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
         freddy_frame = (freddy_frame + 1) % (len(freddy_images_flipped) * 5)
 
         # Draw special cards
