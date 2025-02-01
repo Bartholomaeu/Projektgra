@@ -23,8 +23,9 @@ FONT = pygame.font.Font(None, 36)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Elemental Card Duel")
 
-# Load background image
+# Load background image and scale to screen size
 background = pygame.image.load("tlo.png")
+background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Element strengths
 ELEMENT_STRENGTHS = {
@@ -33,7 +34,6 @@ ELEMENT_STRENGTHS = {
     "Earth": "Water"
 }
 
-
 # Card class
 class Card:
     def __init__(self, name, element):
@@ -41,11 +41,11 @@ class Card:
         self.element = element
 
     def draw(self, x, y):
-        pygame.draw.rect(screen, WHITE, (x, y, 100, 150))
+        pygame.draw.rect(screen, WHITE, (x, y, 120, 180))
         text = FONT.render(self.name, True, BLACK)
         screen.blit(text, (x + 5, y + 10))
         elem_text = FONT.render(self.element, True, BLACK)
-        screen.blit(elem_text, (x + 5, y + 90))
+        screen.blit(elem_text, (x + 5, y + 150))
 
 
 # Special Card class
@@ -55,7 +55,7 @@ class SpecialCard:
         self.action = action
 
     def draw(self, x, y):
-        pygame.draw.rect(screen, YELLOW, (x, y, 100, 150))
+        pygame.draw.rect(screen, YELLOW, (x, y, 120, 180))
         text = FONT.render(self.name, True, BLACK)
         screen.blit(text, (x + 5, y + 10))
 
@@ -73,7 +73,7 @@ class Projectile:
 
     def draw(self):
         color = RED if self.element == "Fire" else BLUE if self.element == "Water" else GREEN
-        pygame.draw.circle(screen, color, (self.x, self.y), 10)
+        pygame.draw.circle(screen, color, (self.x, self.y), 15)
 
 
 # Main game loop
@@ -122,7 +122,7 @@ def main():
                 x, y = event.pos
                 # Check special card selection
                 for i, card in enumerate(special_cards):
-                    if 20 + i * 120 <= x <= 120 + i * 120 and SCREEN_HEIGHT - 200 <= y <= SCREEN_HEIGHT - 50:
+                    if 20 + i * 140 <= x <= 140 + i * 140 and SCREEN_HEIGHT - 220 <= y <= SCREEN_HEIGHT - 40:
                         if card.name == "Reveal" and not special_used["Reveal"]:
                             revealed_element = random.choice(["Fire", "Water", "Earth"])
                             special_used["Reveal"] = True
@@ -135,7 +135,7 @@ def main():
 
                 # Check elemental card selection
                 for i, card in enumerate(player_deck):
-                    if SCREEN_WIDTH // 2 - 240 + i * 120 <= x <= SCREEN_WIDTH // 2 - 140 + i * 120 and SCREEN_HEIGHT - 200 <= y <= SCREEN_HEIGHT - 50:
+                    if SCREEN_WIDTH // 2 - 280 + i * 140 <= x <= SCREEN_WIDTH // 2 - 160 + i * 140 and SCREEN_HEIGHT - 220 <= y <= SCREEN_HEIGHT - 40:
                         if not player_projectile:
                             player_projectile = Projectile(200, SCREEN_HEIGHT // 2, 10, card.element)
                             enemy_choice = random.choice(player_deck)
@@ -155,20 +155,20 @@ def main():
             screen.blit(reveal_text, (20, 60))
 
         # Draw player and enemy
-        pygame.draw.rect(screen, BLUE, (100, SCREEN_HEIGHT // 2 - 50, 100, 100))
+        pygame.draw.rect(screen, BLUE, (100, SCREEN_HEIGHT // 2 - 60, 120, 120))
         pygame.draw.polygon(screen, RED, [
-            (SCREEN_WIDTH - 150, SCREEN_HEIGHT // 2 - 50),
-            (SCREEN_WIDTH - 100, SCREEN_HEIGHT // 2 + 50),
-            (SCREEN_WIDTH - 200, SCREEN_HEIGHT // 2 + 50)
+            (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60),
+            (SCREEN_WIDTH - 120, SCREEN_HEIGHT // 2 + 60),
+            (SCREEN_WIDTH - 240, SCREEN_HEIGHT // 2 + 60)
         ])
 
         # Draw special cards
         for i, card in enumerate(special_cards):
-            card.draw(20 + i * 120, SCREEN_HEIGHT - 200)
+            card.draw(20 + i * 140, SCREEN_HEIGHT - 220)
 
         # Draw elemental cards
         for i, card in enumerate(player_deck):
-            card.draw(SCREEN_WIDTH // 2 - 240 + i * 120, SCREEN_HEIGHT - 200)
+            card.draw(SCREEN_WIDTH // 2 - 280 + i * 140, SCREEN_HEIGHT - 220)
 
         # Handle projectiles
         if player_projectile:
@@ -180,7 +180,7 @@ def main():
             enemy_projectile.draw()
 
         # Check collision
-        if player_projectile and enemy_projectile and abs(player_projectile.x - enemy_projectile.x) < 20:
+        if player_projectile and enemy_projectile and abs(player_projectile.x - enemy_projectile.x) < 30:
             if ELEMENT_STRENGTHS[player_projectile.element] == enemy_projectile.element:
                 enemy_projectile = None
             elif ELEMENT_STRENGTHS[enemy_projectile.element] == player_projectile.element:
@@ -190,13 +190,13 @@ def main():
                 enemy_projectile = None
 
         # Check if projectiles hit their target
-        if player_projectile and player_projectile.x >= SCREEN_WIDTH - 150:
+        if player_projectile and player_projectile.x >= SCREEN_WIDTH - 180:
             damage = 20 if not double_damage else 40
             enemy_health -= damage
             player_projectile = None
             double_damage = False
 
-        if enemy_projectile and enemy_projectile.x <= 150:
+        if enemy_projectile and enemy_projectile.x <= 180:
             player_health -= 20
             enemy_projectile = None
 
