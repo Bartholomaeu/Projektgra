@@ -47,12 +47,37 @@ toady_aw_images = [pygame.transform.scale(img, (120, 120)) for img in toady_aw_i
 toady_ae_images = [pygame.image.load(f"toadyae{i}.png") for i in range(1, 7)]
 toady_ae_images = [pygame.transform.scale(img, (120, 120)) for img in toady_ae_images]
 
+# Load toady death images and scale to desired size
+toady_death_images = [pygame.image.load(f"toadydeath{i}.png") for i in range(1, 14)]
+toady_death_images = [pygame.transform.scale(img, (120, 120)) for img in toady_death_images]
+
+# Load and flip freddy attack fire images
+freddy_af_images = [pygame.image.load(f"freddy{i}af.png") for i in range(1, 7)]
+freddy_af_images = [pygame.transform.flip(pygame.transform.scale(img, (120, 120)), True, False) for img in freddy_af_images]
+
+# Load and flip freddy attack water images
+freddy_aw_images = [pygame.image.load(f"freddy{i}aw.png") for i in range(1, 7)]
+freddy_aw_images = [pygame.transform.flip(pygame.transform.scale(img, (120, 120)), True, False) for img in freddy_aw_images]
+
+# Load and flip freddy attack earth images
+freddy_ae_images = [pygame.image.load(f"freddy{i}ae.png") for i in range(1, 7)]
+freddy_ae_images = [pygame.transform.flip(pygame.transform.scale(img, (120, 120)), True, False) for img in freddy_ae_images]
+
+# Load and flip freddy death images
+freddy_death_images = [pygame.image.load(f"freddydeath{i}.png") for i in range(1, 14)]
+freddy_death_images = [pygame.transform.flip(pygame.transform.scale(img, (120, 120)), True, False) for img in freddy_death_images]
+
 # Frame counter for animation
 toady_frame = 0
 freddy_frame = 0
 toady_af_frame = 0
 toady_aw_frame = 0
 toady_ae_frame = 0
+freddy_af_frame = 0
+freddy_aw_frame = 0
+freddy_ae_frame = 0
+toady_death_frame = 0
+freddy_death_frame = 0
 
 # Element strengths
 ELEMENT_STRENGTHS = {
@@ -140,11 +165,29 @@ def main():
     toady_af_frame = 0
     toady_aw_frame = 0
     toady_ae_frame = 0
+    freddy_af_frame = 0
+    freddy_aw_frame = 0
+    freddy_ae_frame = 0
+    toady_death_frame = 0
+    freddy_death_frame = 0
 
     # Flags to indicate if FIRE, WATER, or EARTH animation is active
     fire_animation_active = False
     water_animation_active = False
     earth_animation_active = False
+
+    # Flags to indicate if Freddy's FIRE, WATER, or EARTH animation is active
+    freddy_fire_animation_active = False
+    freddy_water_animation_active = False
+    freddy_earth_animation_active = False
+
+    # Flags to indicate if death animation is active
+    toady_death_animation_active = False
+    freddy_death_animation_active = False
+
+    # Flags to indicate if game is over
+    game_over = False
+    winner = None
 
     while running:
         screen.fill(BLACK)
@@ -157,7 +200,7 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and not game_over:
                 x, y = event.pos
                 # Check special card selection
                 for i, card in enumerate(special_cards):
@@ -193,6 +236,21 @@ def main():
                                 fire_animation_active = False
                                 water_animation_active = False
 
+                            # Randomly select Freddy's animation based on the element
+                            freddy_element = enemy_choice.element
+                            if freddy_element == "Fire":
+                                freddy_fire_animation_active = True
+                                freddy_water_animation_active = False
+                                freddy_earth_animation_active = False
+                            elif freddy_element == "Water":
+                                freddy_water_animation_active = True
+                                freddy_fire_animation_active = False
+                                freddy_earth_animation_active = False
+                            elif freddy_element == "Earth":
+                                freddy_earth_animation_active = True
+                                freddy_fire_animation_active = False
+                                freddy_water_animation_active = False
+
         # Draw health bars
         player_health_text = FONT.render(f"Player Health: {player_health}", True, WHITE)
         screen.blit(player_health_text, (20, 20))
@@ -206,7 +264,28 @@ def main():
             screen.blit(reveal_text, (20, 60))
 
         # Draw player and enemy images
-        if fire_animation_active:
+        if player_health <= 0:
+            toady_death_animation_active = True
+            game_over = True
+            winner = "freddy"
+        if enemy_health <= 0:
+            freddy_death_animation_active = True
+            game_over = True
+            winner = "toady"
+
+        if toady_death_animation_active:
+            screen.blit(toady_death_images[toady_death_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
+            toady_death_frame += 1
+            if toady_death_frame // 5 >= len(toady_death_images):
+                toady_death_frame = 0
+                toady_death_animation_active = False
+                if winner == "freddy":
+                    lose_text = FONT.render("You Lose!", True, RED)
+                    screen.blit(lose_text, (SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT // 2))
+                    pygame.display.flip()
+                    pygame.time.delay(2000)
+                    running = False
+        elif fire_animation_active:
             screen.blit(toady_af_images[toady_af_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
             toady_af_frame += 1
             if toady_af_frame // 5 >= len(toady_af_images):
@@ -228,8 +307,39 @@ def main():
             screen.blit(toady_images[toady_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
             toady_frame = (toady_frame + 1) % (len(toady_images) * 5)
 
-        screen.blit(freddy_images_flipped[freddy_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
-        freddy_frame = (freddy_frame + 1) % (len(freddy_images_flipped) * 5)
+        if freddy_death_animation_active:
+            screen.blit(freddy_death_images[freddy_death_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
+            freddy_death_frame += 1
+            if freddy_death_frame // 5 >= len(freddy_death_images):
+                freddy_death_frame = 0
+                freddy_death_animation_active = False
+                if winner == "toady":
+                    win_text = FONT.render("You Win!", True, GREEN)
+                    screen.blit(win_text, (SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT // 2))
+                    pygame.display.flip()
+                    pygame.time.delay(2000)
+                    running = False
+        elif freddy_fire_animation_active:
+            screen.blit(freddy_af_images[freddy_af_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
+            freddy_af_frame += 1
+            if freddy_af_frame // 5 >= len(freddy_af_images):
+                freddy_af_frame = 0
+                freddy_fire_animation_active = False
+        elif freddy_water_animation_active:
+            screen.blit(freddy_aw_images[freddy_aw_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
+            freddy_aw_frame += 1
+            if freddy_aw_frame // 5 >= len(freddy_aw_images):
+                freddy_aw_frame = 0
+                freddy_water_animation_active = False
+        elif freddy_earth_animation_active:
+            screen.blit(freddy_ae_images[freddy_ae_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
+            freddy_ae_frame += 1
+            if freddy_ae_frame // 5 >= len(freddy_ae_images):
+                freddy_ae_frame = 0
+                freddy_earth_animation_active = False
+        else:
+            screen.blit(freddy_images_flipped[freddy_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
+            freddy_frame = (freddy_frame + 1) % (len(freddy_images_flipped) * 5)
 
         # Draw special cards
         for i, card in enumerate(special_cards):
@@ -268,21 +378,6 @@ def main():
         if enemy_projectile and enemy_projectile.x <= 180:
             player_health -= 20
             enemy_projectile = None
-
-        # Check for win/lose
-        if player_health <= 0:
-            lose_text = FONT.render("You Lose!", True, RED)
-            screen.blit(lose_text, (SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT // 2))
-            pygame.display.flip()
-            pygame.time.delay(2000)
-            running = False
-
-        if enemy_health <= 0:
-            win_text = FONT.render("You Win!", True, GREEN)
-            screen.blit(win_text, (SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT // 2))
-            pygame.display.flip()
-            pygame.time.delay(2000)
-            running = False
 
         # Update display
         pygame.display.flip()
