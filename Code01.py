@@ -27,6 +27,14 @@ pygame.display.set_caption("Elemental Card Duel")
 background = pygame.image.load("tlo.png")
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
+# Load character images and scale to desired size
+toady_images = [pygame.image.load(f"toady{i}.png") for i in range(2, 7)]
+toady_images = [pygame.transform.scale(img, (120, 120)) for img in toady_images]
+
+freddy_images = [pygame.image.load(f"freddy{i}.png") for i in range(2, 7)]
+freddy_images = [pygame.transform.scale(img, (120, 120)) for img in freddy_images]
+freddy_images_flipped = [pygame.transform.flip(img, True, False) for img in freddy_images]
+
 # Element strengths
 ELEMENT_STRENGTHS = {
     "Fire": "Earth",
@@ -107,6 +115,10 @@ def main():
     enemy_projectile = None
     revealed_element = None
 
+    # Initialize frame counters
+    toady_frame = 0
+    freddy_frame = 0
+
     while running:
         screen.fill(BLACK)
 
@@ -154,13 +166,13 @@ def main():
             reveal_text = FONT.render(f"Enemy Element: {revealed_element}", True, YELLOW)
             screen.blit(reveal_text, (20, 60))
 
-        # Draw player and enemy
-        pygame.draw.rect(screen, BLUE, (100, SCREEN_HEIGHT // 2 - 60, 120, 120))
-        pygame.draw.polygon(screen, RED, [
-            (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60),
-            (SCREEN_WIDTH - 120, SCREEN_HEIGHT // 2 + 60),
-            (SCREEN_WIDTH - 240, SCREEN_HEIGHT // 2 + 60)
-        ])
+        # Draw player and enemy images
+        screen.blit(toady_images[toady_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
+        screen.blit(freddy_images_flipped[freddy_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
+
+        # Update frames for animation
+        toady_frame = (toady_frame + 1) % (len(toady_images) * 5)
+        freddy_frame = (freddy_frame + 1) % (len(freddy_images_flipped) * 5)
 
         # Draw special cards
         for i, card in enumerate(special_cards):
