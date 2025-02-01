@@ -23,6 +23,9 @@ FONT = pygame.font.Font(None, 36)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Elemental Card Duel")
 
+# Load background image
+background = pygame.image.load("tlo.png")
+
 # Element strengths
 ELEMENT_STRENGTHS = {
     "Fire": "Earth",
@@ -106,6 +109,9 @@ def main():
 
     while running:
         screen.fill(BLACK)
+
+        # Draw background
+        screen.blit(background, (0, 0))
 
         # Event handling
         for event in pygame.event.get():
