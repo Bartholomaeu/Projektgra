@@ -27,45 +27,45 @@ pygame.display.set_caption("Elemental Card Duel")
 background = pygame.image.load("tlo.png")
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-# Load character images and scale to desired size
+# Load character images and scale to desired size (significantly larger)
 toady_images = [pygame.image.load(f"toady{i}.png") for i in range(2, 7)]
-toady_images = [pygame.transform.scale(img, (120, 120)) for img in toady_images]
+toady_images = [pygame.transform.scale(img, (250, 250)) for img in toady_images]
 
 freddy_images = [pygame.image.load(f"freddy{i}.png") for i in range(2, 7)]
-freddy_images = [pygame.transform.scale(img, (120, 120)) for img in freddy_images]
+freddy_images = [pygame.transform.scale(img, (250, 250)) for img in freddy_images]
 freddy_images_flipped = [pygame.transform.flip(img, True, False) for img in freddy_images]
 
-# Load toady attack fire images and scale to desired size
+# Load toady attack fire images and scale to desired size (significantly larger)
 toady_af_images = [pygame.image.load(f"toadyaf{i}.png") for i in range(1, 7)]
-toady_af_images = [pygame.transform.scale(img, (120, 120)) for img in toady_af_images]
+toady_af_images = [pygame.transform.scale(img, (250, 250)) for img in toady_af_images]
 
-# Load toady attack water images and scale to desired size
+# Load toady attack water images and scale to desired size (significantly larger)
 toady_aw_images = [pygame.image.load(f"toadyaw{i}.png") for i in range(1, 7)]
-toady_aw_images = [pygame.transform.scale(img, (120, 120)) for img in toady_aw_images]
+toady_aw_images = [pygame.transform.scale(img, (250, 250)) for img in toady_aw_images]
 
-# Load toady attack earth images and scale to desired size
+# Load toady attack earth images and scale to desired size (significantly larger)
 toady_ae_images = [pygame.image.load(f"toadyae{i}.png") for i in range(1, 7)]
-toady_ae_images = [pygame.transform.scale(img, (120, 120)) for img in toady_ae_images]
+toady_ae_images = [pygame.transform.scale(img, (250, 250)) for img in toady_ae_images]
 
-# Load toady death images and scale to desired size
+# Load toady death images and scale to desired size (significantly larger)
 toady_death_images = [pygame.image.load(f"toadydeath{i}.png") for i in range(1, 14)]
-toady_death_images = [pygame.transform.scale(img, (120, 120)) for img in toady_death_images]
+toady_death_images = [pygame.transform.scale(img, (250, 250)) for img in toady_death_images]
 
-# Load and flip freddy attack fire images
+# Load and flip freddy attack fire images (significantly larger)
 freddy_af_images = [pygame.image.load(f"freddy{i}af.png") for i in range(1, 7)]
-freddy_af_images = [pygame.transform.flip(pygame.transform.scale(img, (120, 120)), True, False) for img in freddy_af_images]
+freddy_af_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_af_images]
 
-# Load and flip freddy attack water images
+# Load and flip freddy attack water images (significantly larger)
 freddy_aw_images = [pygame.image.load(f"freddy{i}aw.png") for i in range(1, 7)]
-freddy_aw_images = [pygame.transform.flip(pygame.transform.scale(img, (120, 120)), True, False) for img in freddy_aw_images]
+freddy_aw_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_aw_images]
 
-# Load and flip freddy attack earth images
+# Load and flip freddy attack earth images (significantly larger)
 freddy_ae_images = [pygame.image.load(f"freddy{i}ae.png") for i in range(1, 7)]
-freddy_ae_images = [pygame.transform.flip(pygame.transform.scale(img, (120, 120)), True, False) for img in freddy_ae_images]
+freddy_ae_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_ae_images]
 
-# Load and flip freddy death images
+# Load and flip freddy death images (significantly larger)
 freddy_death_images = [pygame.image.load(f"freddydeath{i}.png") for i in range(1, 14)]
-freddy_death_images = [pygame.transform.flip(pygame.transform.scale(img, (120, 120)), True, False) for img in freddy_death_images]
+freddy_death_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_death_images]
 
 # Frame counter for animation
 toady_frame = 0
@@ -204,7 +204,7 @@ def main():
                 x, y = event.pos
                 # Check special card selection
                 for i, card in enumerate(special_cards):
-                    if 20 + i * 140 <= x <= 140 + i * 140 and SCREEN_HEIGHT - 220 <= y <= SCREEN_HEIGHT - 40:
+                    if (SCREEN_WIDTH // 2 - 210) + i * 140 <= x <= (SCREEN_WIDTH // 2 - 90) + i * 140 and 20 <= y <= 200:
                         if card.name == "Reveal" and not special_used["Reveal"]:
                             revealed_element = random.choice(["Fire", "Water", "Earth"])
                             special_used["Reveal"] = True
@@ -217,12 +217,11 @@ def main():
 
                 # Check elemental card selection
                 for i, card in enumerate(player_deck):
-                    if SCREEN_WIDTH // 2 - 280 + i * 140 <= x <= SCREEN_WIDTH // 2 - 160 + i * 140 and SCREEN_HEIGHT - 220 <= y <= SCREEN_HEIGHT - 40:
+                    if (SCREEN_WIDTH // 2 - 210) + i * 140 <= x <= (SCREEN_WIDTH // 2 - 90) + i * 140 and SCREEN_HEIGHT - 220 <= y <= SCREEN_HEIGHT - 40:
                         if not player_projectile:
-                            player_projectile = Projectile(200, SCREEN_HEIGHT // 2, 10, card.element)
+                            player_projectile = Projectile(225, SCREEN_HEIGHT - 225, 10, card.element)
                             enemy_choice = random.choice(player_deck)
-                            enemy_projectile = Projectile(SCREEN_WIDTH - 200, SCREEN_HEIGHT // 2, -10,
-                                                          enemy_choice.element)
+                            enemy_projectile = Projectile(SCREEN_WIDTH - 325, SCREEN_HEIGHT - 225, -10, enemy_choice.element)
                             if card.element == "Fire":
                                 fire_animation_active = True
                                 water_animation_active = False
@@ -253,7 +252,7 @@ def main():
 
         # Draw health bars
         player_health_text = FONT.render(f"Player Health: {player_health}", True, WHITE)
-        screen.blit(player_health_text, (20, 20))
+        screen.blit(player_health_text, (50, 20))
 
         enemy_health_text = FONT.render(f"Enemy Health: {enemy_health}", True, WHITE)
         screen.blit(enemy_health_text, (SCREEN_WIDTH - 250, 20))
@@ -261,9 +260,15 @@ def main():
         # Draw revealed element
         if revealed_element:
             reveal_text = FONT.render(f"Enemy Element: {revealed_element}", True, YELLOW)
-            screen.blit(reveal_text, (20, 60))
+            screen.blit(reveal_text, (SCREEN_WIDTH // 2 - 60, 250))
 
         # Draw player and enemy images
+        player_y_pos = SCREEN_HEIGHT - 300  # Y position for the player
+        enemy_y_pos = SCREEN_HEIGHT - 300  # Y position for the enemy
+
+        player_x_pos = 100  # X position for the player
+        enemy_x_pos = SCREEN_WIDTH - 350  # X position for the enemy
+
         if player_health <= 0:
             toady_death_animation_active = True
             game_over = True
@@ -274,7 +279,7 @@ def main():
             winner = "toady"
 
         if toady_death_animation_active:
-            screen.blit(toady_death_images[toady_death_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
+            screen.blit(toady_death_images[toady_death_frame // 5], (player_x_pos, player_y_pos))
             toady_death_frame += 1
             if toady_death_frame // 5 >= len(toady_death_images):
                 toady_death_frame = 0
@@ -286,29 +291,29 @@ def main():
                     pygame.time.delay(2000)
                     running = False
         elif fire_animation_active:
-            screen.blit(toady_af_images[toady_af_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
+            screen.blit(toady_af_images[toady_af_frame // 5], (player_x_pos, player_y_pos))
             toady_af_frame += 1
             if toady_af_frame // 5 >= len(toady_af_images):
                 toady_af_frame = 0
                 fire_animation_active = False
         elif water_animation_active:
-            screen.blit(toady_aw_images[toady_aw_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
+            screen.blit(toady_aw_images[toady_aw_frame // 5], (player_x_pos, player_y_pos))
             toady_aw_frame += 1
             if toady_aw_frame // 5 >= len(toady_aw_images):
                 toady_aw_frame = 0
                 water_animation_active = False
         elif earth_animation_active:
-            screen.blit(toady_ae_images[toady_ae_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
+            screen.blit(toady_ae_images[toady_ae_frame // 5], (player_x_pos, player_y_pos))
             toady_ae_frame += 1
             if toady_ae_frame // 5 >= len(toady_ae_images):
                 toady_ae_frame = 0
                 earth_animation_active = False
         else:
-            screen.blit(toady_images[toady_frame // 5], (100, SCREEN_HEIGHT // 2 - 60))
+            screen.blit(toady_images[toady_frame // 5], (player_x_pos, player_y_pos))
             toady_frame = (toady_frame + 1) % (len(toady_images) * 5)
 
         if freddy_death_animation_active:
-            screen.blit(freddy_death_images[freddy_death_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
+            screen.blit(freddy_death_images[freddy_death_frame // 5], (enemy_x_pos, enemy_y_pos))
             freddy_death_frame += 1
             if freddy_death_frame // 5 >= len(freddy_death_images):
                 freddy_death_frame = 0
@@ -320,34 +325,41 @@ def main():
                     pygame.time.delay(2000)
                     running = False
         elif freddy_fire_animation_active:
-            screen.blit(freddy_af_images[freddy_af_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
+            screen.blit(freddy_af_images[freddy_af_frame // 5], (enemy_x_pos, enemy_y_pos))
             freddy_af_frame += 1
             if freddy_af_frame // 5 >= len(freddy_af_images):
                 freddy_af_frame = 0
                 freddy_fire_animation_active = False
         elif freddy_water_animation_active:
-            screen.blit(freddy_aw_images[freddy_aw_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
+            screen.blit(freddy_aw_images[freddy_aw_frame // 5], (enemy_x_pos, enemy_y_pos))
             freddy_aw_frame += 1
             if freddy_aw_frame // 5 >= len(freddy_aw_images):
                 freddy_aw_frame = 0
                 freddy_water_animation_active = False
         elif freddy_earth_animation_active:
-            screen.blit(freddy_ae_images[freddy_ae_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
+            screen.blit(freddy_ae_images[freddy_ae_frame // 5], (enemy_x_pos, enemy_y_pos))
             freddy_ae_frame += 1
             if freddy_ae_frame // 5 >= len(freddy_ae_images):
                 freddy_ae_frame = 0
                 freddy_earth_animation_active = False
         else:
-            screen.blit(freddy_images_flipped[freddy_frame // 5], (SCREEN_WIDTH - 180, SCREEN_HEIGHT // 2 - 60))
+            screen.blit(freddy_images_flipped[freddy_frame // 5], (enemy_x_pos, enemy_y_pos))
             freddy_frame = (freddy_frame + 1) % (len(freddy_images_flipped) * 5)
 
         # Draw special cards
         for i, card in enumerate(special_cards):
-            card.draw(20 + i * 140, SCREEN_HEIGHT - 220)
+            if not special_used[card.name]:
+                card.draw((SCREEN_WIDTH // 2 - 210) + i * 140, 20)
 
         # Draw elemental cards
         for i, card in enumerate(player_deck):
-            card.draw(SCREEN_WIDTH // 2 - 280 + i * 140, SCREEN_HEIGHT - 220)
+            card.draw((SCREEN_WIDTH // 2 - 210) + i * 140, SCREEN_HEIGHT - 220)
+
+        # Draw labels
+        abilities_text = FONT.render("Abilities", True, WHITE)
+        spells_text = FONT.render("Spells", True, WHITE)
+        screen.blit(abilities_text, (SCREEN_WIDTH // 2 - 60, 200))
+        screen.blit(spells_text, (SCREEN_WIDTH // 2 - 40, SCREEN_HEIGHT - 260))
 
         # Handle projectiles
         if player_projectile:
