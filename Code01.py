@@ -77,6 +77,11 @@ reveal_card_img = pygame.transform.scale(pygame.image.load("reveal.png"), (120, 
 heal_card_img = pygame.transform.scale(pygame.image.load("heal.png"), (120, 180))
 double_card_img = pygame.transform.scale(pygame.image.load("double.png"), (120, 180))
 
+# Load projectile animation images
+fire_projectile_images = [pygame.image.load(f"o{i}.png") for i in range(1, 7)]
+water_projectile_images = [pygame.image.load(f"w{i}.png") for i in range(1, 7)]
+earth_projectile_images = [pygame.image.load(f"z{i}.png") for i in range(1, 7)]
+
 # Frame counter for animation
 toady_frame = 0
 freddy_frame = 0
@@ -137,13 +142,21 @@ class Projectile:
         self.y = y
         self.speed = speed
         self.element = element
+        self.frame = 0
+        if self.element == "Fire":
+            self.images = fire_projectile_images
+        elif self.element == "Water":
+            self.images = water_projectile_images
+        elif self.element == "Earth":
+            self.images = earth_projectile_images
 
     def move(self):
         self.x += self.speed
 
     def draw(self):
-        color = RED if self.element == "Fire" else BLUE if self.element == "Water" else GREEN
-        pygame.draw.circle(screen, color, (self.x, self.y), 15)
+        # Draw the current frame of the animation
+        screen.blit(self.images[self.frame // 5], (self.x, self.y))
+        self.frame = (self.frame + 1) % (len(self.images) * 5)
 
 
 # Main game loop
