@@ -77,10 +77,15 @@ reveal_card_img = pygame.transform.scale(pygame.image.load("reveal.png"), (120, 
 heal_card_img = pygame.transform.scale(pygame.image.load("heal.png"), (120, 180))
 double_card_img = pygame.transform.scale(pygame.image.load("double.png"), (120, 180))
 
-# Load projectile animation images
-fire_projectile_images = [pygame.image.load(f"o{i}.png") for i in range(1, 7)]
-water_projectile_images = [pygame.image.load(f"w{i}.png") for i in range(1, 7)]
-earth_projectile_images = [pygame.image.load(f"z{i}.png") for i in range(1, 7)]
+# Load projectile animation images for toady and flip them horizontally
+toady_fire_projectile_images = [pygame.transform.flip(pygame.image.load(f"o{i}.png"), True, False) for i in range(1, 7)]
+toady_water_projectile_images = [pygame.transform.flip(pygame.image.load(f"w{i}.png"), True, False) for i in range(1, 7)]
+toady_earth_projectile_images = [pygame.transform.flip(pygame.image.load(f"z{i}.png"), True, False) for i in range(1, 7)]
+
+# Load projectile animation images for freddy (no flip needed)
+freddy_fire_projectile_images = [pygame.image.load(f"o{i}.png") for i in range(1, 7)]
+freddy_water_projectile_images = [pygame.image.load(f"w{i}.png") for i in range(1, 7)]
+freddy_earth_projectile_images = [pygame.image.load(f"z{i}.png") for i in range(1, 7)]
 
 # Frame counter for animation
 toady_frame = 0
@@ -137,18 +142,27 @@ class SpecialCard:
 
 # Projectile class
 class Projectile:
-    def __init__(self, x, y, speed, element):
+    def __init__(self, x, y, speed, element, character):
         self.x = x
         self.y = y
         self.speed = speed
         self.element = element
+        self.character = character
         self.frame = 0
-        if self.element == "Fire":
-            self.images = fire_projectile_images
-        elif self.element == "Water":
-            self.images = water_projectile_images
-        elif self.element == "Earth":
-            self.images = earth_projectile_images
+        if self.character == "toady":
+            if self.element == "Fire":
+                self.images = toady_fire_projectile_images
+            elif self.element == "Water":
+                self.images = toady_water_projectile_images
+            elif self.element == "Earth":
+                self.images = toady_earth_projectile_images
+        elif self.character == "freddy":
+            if self.element == "Fire":
+                self.images = freddy_fire_projectile_images
+            elif self.element == "Water":
+                self.images = freddy_water_projectile_images
+            elif self.element == "Earth":
+                self.images = freddy_earth_projectile_images
 
     def move(self):
         self.x += self.speed
@@ -250,9 +264,9 @@ def main():
                 for i, card in enumerate(player_deck):
                     if (SCREEN_WIDTH // 2 - 210) + i * 140 <= x <= (SCREEN_WIDTH // 2 - 90) + i * 140 and SCREEN_HEIGHT - 220 <= y <= SCREEN_HEIGHT - 40:
                         if not player_projectile:
-                            player_projectile = Projectile(225, SCREEN_HEIGHT - 225, 10, card.element)
+                            player_projectile = Projectile(225, SCREEN_HEIGHT - 225, 10, card.element, "toady")
                             enemy_choice = random.choice(player_deck)
-                            enemy_projectile = Projectile(SCREEN_WIDTH - 325, SCREEN_HEIGHT - 225, -10, enemy_choice.element)
+                            enemy_projectile = Projectile(SCREEN_WIDTH - 325, SCREEN_HEIGHT - 225, -10, enemy_choice.element, "freddy")
                             if card.element == "Fire":
                                 fire_animation_active = True
                                 water_animation_active = False
