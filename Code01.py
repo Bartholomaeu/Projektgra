@@ -3,6 +3,12 @@ import random
 
 # Initialize Pygame
 pygame.init()
+pygame.mixer.init()  # Initialize the mixer module
+
+# Load and play background music
+pygame.mixer.music.load("muzyka.wav")
+pygame.mixer.music.set_volume(0.5)  # Set the volume to 50%
+pygame.mixer.music.play(-1)  # Play the music in a loop
 
 # Screen dimensions
 SCREEN_WIDTH = 1600
