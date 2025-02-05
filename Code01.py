@@ -112,9 +112,6 @@ class Card:
     def draw(self, x, y):
         if self.image:
             screen.blit(self.image, (x, y))
-        text = FONT.render(self.name, True, BLACK)
-        screen.blit(text, (x + 5, y + 10))
-
 
 # Special Card class
 class SpecialCard:
@@ -132,9 +129,6 @@ class SpecialCard:
     def draw(self, x, y):
         if self.image:
             screen.blit(self.image, (x, y))
-        text = FONT.render(self.name, True, BLACK)
-        screen.blit(text, (x + 5, y + 10))
-
 
 # Projectile class
 class Projectile:
