@@ -67,6 +67,11 @@ freddy_ae_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)
 freddy_death_images = [pygame.image.load(f"freddydeath{i}.png") for i in range(1, 14)]
 freddy_death_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_death_images]
 
+# Load card images and scale to card size
+fire_card_img = pygame.transform.scale(pygame.image.load("kogien.png"), (120, 180))
+water_card_img = pygame.transform.scale(pygame.image.load("kwoda.png"), (120, 180))
+earth_card_img = pygame.transform.scale(pygame.image.load("kziemia.png"), (120, 180))
+
 # Frame counter for animation
 toady_frame = 0
 freddy_frame = 0
@@ -91,13 +96,19 @@ class Card:
     def __init__(self, name, element):
         self.name = name
         self.element = element
+        self.image = None
+        if element == "Fire":
+            self.image = fire_card_img
+        elif element == "Water":
+            self.image = water_card_img
+        elif element == "Earth":
+            self.image = earth_card_img
 
     def draw(self, x, y):
-        pygame.draw.rect(screen, WHITE, (x, y, 120, 180))
+        if self.image:
+            screen.blit(self.image, (x, y))
         text = FONT.render(self.name, True, BLACK)
         screen.blit(text, (x + 5, y + 10))
-        elem_text = FONT.render(self.element, True, BLACK)
-        screen.blit(elem_text, (x + 5, y + 150))
 
 
 # Special Card class
