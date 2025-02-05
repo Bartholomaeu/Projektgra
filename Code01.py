@@ -400,12 +400,6 @@ def main():
         for i, card in enumerate(player_deck):
             card.draw((SCREEN_WIDTH // 2 - 210) + i * 140, SCREEN_HEIGHT - 220)
 
-        # Draw labels
-        abilities_text = FONT.render("Abilities", True, WHITE)
-        spells_text = FONT.render("Spells", True, WHITE)
-        screen.blit(abilities_text, (SCREEN_WIDTH // 2 - 60, 200))
-        screen.blit(spells_text, (SCREEN_WIDTH // 2 - 40, SCREEN_HEIGHT - 260))
-
         # Handle projectiles
         if player_projectile:
             player_projectile.move()
