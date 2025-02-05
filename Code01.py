@@ -72,6 +72,11 @@ fire_card_img = pygame.transform.scale(pygame.image.load("kogien.png"), (120, 18
 water_card_img = pygame.transform.scale(pygame.image.load("kwoda.png"), (120, 180))
 earth_card_img = pygame.transform.scale(pygame.image.load("kziemia.png"), (120, 180))
 
+# Add the new special card images
+reveal_card_img = pygame.transform.scale(pygame.image.load("reveal.png"), (120, 180))
+heal_card_img = pygame.transform.scale(pygame.image.load("heal.png"), (120, 180))
+double_card_img = pygame.transform.scale(pygame.image.load("double.png"), (120, 180))
+
 # Frame counter for animation
 toady_frame = 0
 freddy_frame = 0
@@ -116,9 +121,17 @@ class SpecialCard:
     def __init__(self, name, action):
         self.name = name
         self.action = action
+        self.image = None
+        if name == "Reveal":
+            self.image = reveal_card_img
+        elif name == "Heal":
+            self.image = heal_card_img
+        elif name == "Double":
+            self.image = double_card_img
 
     def draw(self, x, y):
-        pygame.draw.rect(screen, YELLOW, (x, y, 120, 180))
+        if self.image:
+            screen.blit(self.image, (x, y))
         text = FONT.render(self.name, True, BLACK)
         screen.blit(text, (x + 5, y + 10))
 
