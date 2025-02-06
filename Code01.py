@@ -27,7 +27,17 @@ FONT = pygame.font.Font(None, 36)
 
 # Set up the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Elemental Card Duel")
+pygame.display.set_caption("Eligebete")
+
+# Load start screen images and scale them
+start_img = pygame.image.load("start.png")
+start_img = pygame.transform.scale(start_img, (int(start_img.get_width() // 3), int(start_img.get_height() // 3)))
+
+play_img = pygame.image.load("play.png")
+play_img = pygame.transform.scale(play_img, (int(play_img.get_width() // 3), int(play_img.get_height() // 3)))
+
+exit_img = pygame.image.load("exit.png")
+exit_img = pygame.transform.scale(exit_img, (int(exit_img.get_width() // 3), int(exit_img.get_height() // 3)))
 
 # Load background image and scale to screen size
 background = pygame.image.load("tlo.png")
@@ -183,6 +193,7 @@ class Projectile:
 def main():
     clock = pygame.time.Clock()
     running = True
+    game_started = False
 
     # Player and enemy data
     player_health = 100
@@ -243,13 +254,46 @@ def main():
     while running:
         screen.fill(BLACK)
 
-        # Draw background
-        screen.blit(background, (0, 0))
+        if not game_started:
+            # Draw start screen
+            screen.blit(start_img, (
+            SCREEN_WIDTH // 2 - start_img.get_width() // 2, SCREEN_HEIGHT // 2 - start_img.get_height() // 2 - 150))
+            screen.blit(play_img, (
+            SCREEN_WIDTH // 2 - play_img.get_width() // 2 - 200, SCREEN_HEIGHT // 2 - play_img.get_height() // 2))
+            screen.blit(exit_img, (
+            SCREEN_WIDTH // 2 - exit_img.get_width() // 2 + 200, SCREEN_HEIGHT // 2 - exit_img.get_height() // 2))
 
-        # Event handling
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = event.pos
+                    if SCREEN_WIDTH // 2 - play_img.get_width() // 2 - 200 <= x <= SCREEN_WIDTH // 2 - play_img.get_width() // 2 - 200 + play_img.get_width() and SCREEN_HEIGHT // 2 - play_img.get_height() // 2 <= y <= SCREEN_HEIGHT // 2 - play_img.get_height() // 2 + play_img.get_height():
+                        game_started = True
+                    if SCREEN_WIDTH // 2 - exit_img.get_width() // 2 + 200 <= x <= SCREEN_WIDTH // 2 - exit_img.get_width() // 2 + 200 + exit_img.get_width() and SCREEN_HEIGHT // 2 - exit_img.get_height() // 2 <= y <= SCREEN_HEIGHT // 2 - exit_img.get_height() // 2 + exit_img.get_height():
+                        running = False
+        else:
+            # Draw background
+            screen.blit(background, (0, 0))
+
+            # Event handling
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = event.pos
+
+                    # Jeśli element został ujawniony, każde kolejne kliknięcie go ukrywa
+                    if revealed_element:
+                        revealed_element = None
+                    else:
+                        # Sprawdzamy, czy kliknięto kartę "Reveal"
+                        for i, card in enumerate(special_cards):
+                            if (SCREEN_WIDTH // 2 - 210) + i * 140 <= x <= (
+                                    SCREEN_WIDTH // 2 - 90) + i * 140 and 20 <= y <= 200:
+                                if card.name == "Reveal" and not special_used["Reveal"]:
+                                    revealed_element = random.choice(["Fire", "Water", "Earth"])
+                                    special_used["Reveal"] = True
 
             if event.type == pygame.MOUSEBUTTONDOWN and not game_over:
                 x, y = event.pos
