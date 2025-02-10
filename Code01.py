@@ -8,7 +8,7 @@ pygame.mixer.init()  # Initialize the mixer module
 # Load and play background music
 pygame.mixer.music.load("muzyka.wav")
 pygame.mixer.music.set_volume(0.5)  # Set the volume to 50%
-pygame.mixer.music.play(-1)  # Play the music in a loop
+
 
 # Screen dimensions
 SCREEN_WIDTH = 1600
@@ -39,69 +39,90 @@ play_img = pygame.transform.scale(play_img, (int(play_img.get_width() // 3), int
 exit_img = pygame.image.load("exit.png")
 exit_img = pygame.transform.scale(exit_img, (int(exit_img.get_width() // 3), int(exit_img.get_height() // 3)))
 
-# Load background image and scale to screen size
-background = pygame.image.load("tlo.png")
-background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
-
-# Load character images and scale to desired size (significantly larger)
+fire_card_img = pygame.transform.scale(pygame.image.load("kogien.png"), (120, 180))
+water_card_img = pygame.transform.scale(pygame.image.load("kwoda.png"), (120, 180))
+earth_card_img = pygame.transform.scale(pygame.image.load("kziemia.png"), (120, 180))
+reveal_card_img = pygame.transform.scale(pygame.image.load("reveal.png"), (120, 180))
+heal_card_img = pygame.transform.scale(pygame.image.load("heal.png"), (120, 180))
+double_card_img = pygame.transform.scale(pygame.image.load("double.png"), (120, 180))
 toady_images = [pygame.image.load(f"toady{i}.png") for i in range(2, 7)]
 toady_images = [pygame.transform.scale(img, (250, 250)) for img in toady_images]
-
 freddy_images = [pygame.image.load(f"freddy{i}.png") for i in range(2, 7)]
 freddy_images = [pygame.transform.scale(img, (250, 250)) for img in freddy_images]
 freddy_images_flipped = [pygame.transform.flip(img, True, False) for img in freddy_images]
 
+
+def load_game_assets():
+    global background, toady_images, freddy_images, freddy_images_flipped
+    global toady_af_images, toady_aw_images, toady_ae_images, toady_death_images
+    global freddy_af_images, freddy_aw_images, freddy_ae_images, freddy_death_images
+    global fire_card_img, water_card_img, earth_card_img
+    global reveal_card_img, heal_card_img, double_card_img
+    global toady_fire_projectile_images, toady_water_projectile_images, toady_earth_projectile_images
+    global freddy_fire_projectile_images, freddy_water_projectile_images, freddy_earth_projectile_images
+# Load background image and scale to screen size
+    background = pygame.image.load("tlo.png")
+    background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+# Load character images and scale to desired size (significantly larger)
+    toady_images = [pygame.image.load(f"toady{i}.png") for i in range(2, 7)]
+    toady_images = [pygame.transform.scale(img, (250, 250)) for img in toady_images]
+
+    freddy_images = [pygame.image.load(f"freddy{i}.png") for i in range(2, 7)]
+    freddy_images = [pygame.transform.scale(img, (250, 250)) for img in freddy_images]
+    freddy_images_flipped = [pygame.transform.flip(img, True, False) for img in freddy_images]
+
 # Load toady attack fire images and scale to desired size (significantly larger)
-toady_af_images = [pygame.image.load(f"toadyaf{i}.png") for i in range(1, 7)]
-toady_af_images = [pygame.transform.scale(img, (250, 250)) for img in toady_af_images]
+    toady_af_images = [pygame.image.load(f"toadyaf{i}.png") for i in range(1, 7)]
+    toady_af_images = [pygame.transform.scale(img, (250, 250)) for img in toady_af_images]
 
 # Load toady attack water images and scale to desired size (significantly larger)
-toady_aw_images = [pygame.image.load(f"toadyaw{i}.png") for i in range(1, 7)]
-toady_aw_images = [pygame.transform.scale(img, (250, 250)) for img in toady_aw_images]
+    toady_aw_images = [pygame.image.load(f"toadyaw{i}.png") for i in range(1, 7)]
+    toady_aw_images = [pygame.transform.scale(img, (250, 250)) for img in toady_aw_images]
 
 # Load toady attack earth images and scale to desired size (significantly larger)
-toady_ae_images = [pygame.image.load(f"toadyae{i}.png") for i in range(1, 7)]
-toady_ae_images = [pygame.transform.scale(img, (250, 250)) for img in toady_ae_images]
+    toady_ae_images = [pygame.image.load(f"toadyae{i}.png") for i in range(1, 7)]
+    toady_ae_images = [pygame.transform.scale(img, (250, 250)) for img in toady_ae_images]
 
 # Load toady death images and scale to desired size (significantly larger)
-toady_death_images = [pygame.image.load(f"toadydeath{i}.png") for i in range(1, 14)]
-toady_death_images = [pygame.transform.scale(img, (250, 250)) for img in toady_death_images]
+    toady_death_images = [pygame.image.load(f"toadydeath{i}.png") for i in range(1, 14)]
+    toady_death_images = [pygame.transform.scale(img, (250, 250)) for img in toady_death_images]
 
 # Load and flip freddy attack fire images (significantly larger)
-freddy_af_images = [pygame.image.load(f"freddy{i}af.png") for i in range(1, 7)]
-freddy_af_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_af_images]
+    freddy_af_images = [pygame.image.load(f"freddy{i}af.png") for i in range(1, 7)]
+    freddy_af_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_af_images]
 
 # Load and flip freddy attack water images (significantly larger)
-freddy_aw_images = [pygame.image.load(f"freddy{i}aw.png") for i in range(1, 7)]
-freddy_aw_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_aw_images]
+    freddy_aw_images = [pygame.image.load(f"freddy{i}aw.png") for i in range(1, 7)]
+    freddy_aw_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_aw_images]
 
 # Load and flip freddy attack earth images (significantly larger)
-freddy_ae_images = [pygame.image.load(f"freddy{i}ae.png") for i in range(1, 7)]
-freddy_ae_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_ae_images]
+    freddy_ae_images = [pygame.image.load(f"freddy{i}ae.png") for i in range(1, 7)]
+    freddy_ae_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_ae_images]
 
 # Load and flip freddy death images (significantly larger)
-freddy_death_images = [pygame.image.load(f"freddydeath{i}.png") for i in range(1, 14)]
-freddy_death_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_death_images]
+    freddy_death_images = [pygame.image.load(f"freddydeath{i}.png") for i in range(1, 14)]
+    freddy_death_images = [pygame.transform.flip(pygame.transform.scale(img, (250, 250)), True, False) for img in freddy_death_images]
 
 # Load card images and scale to card size
-fire_card_img = pygame.transform.scale(pygame.image.load("kogien.png"), (120, 180))
-water_card_img = pygame.transform.scale(pygame.image.load("kwoda.png"), (120, 180))
-earth_card_img = pygame.transform.scale(pygame.image.load("kziemia.png"), (120, 180))
+    fire_card_img = pygame.transform.scale(pygame.image.load("kogien.png"), (120, 180))
+    water_card_img = pygame.transform.scale(pygame.image.load("kwoda.png"), (120, 180))
+    earth_card_img = pygame.transform.scale(pygame.image.load("kziemia.png"), (120, 180))
 
 # Add the new special card images
-reveal_card_img = pygame.transform.scale(pygame.image.load("reveal.png"), (120, 180))
-heal_card_img = pygame.transform.scale(pygame.image.load("heal.png"), (120, 180))
-double_card_img = pygame.transform.scale(pygame.image.load("double.png"), (120, 180))
+    reveal_card_img = pygame.transform.scale(pygame.image.load("reveal.png"), (120, 180))
+    heal_card_img = pygame.transform.scale(pygame.image.load("heal.png"), (120, 180))
+    double_card_img = pygame.transform.scale(pygame.image.load("double.png"), (120, 180))
 
 # Load projectile animation images for toady and flip them horizontally
-toady_fire_projectile_images = [pygame.transform.scale(pygame.transform.flip(pygame.image.load(f"o{i}.png"), True, False), (int(pygame.image.load(f"o{i}.png").get_width() * 2), int(pygame.image.load(f"o{i}.png").get_height() * 3))) for i in range(1, 7)]
-toady_water_projectile_images = [pygame.transform.scale(pygame.transform.flip(pygame.image.load(f"w{i}.png"), True, False), (int(pygame.image.load(f"w{i}.png").get_width() * 2), int(pygame.image.load(f"w{i}.png").get_height() * 3))) for i in range(1, 7)]
-toady_earth_projectile_images = [pygame.transform.scale(pygame.transform.flip(pygame.image.load(f"z{i}.png"), True, False), (int(pygame.image.load(f"z{i}.png").get_width() * 2), int(pygame.image.load(f"z{i}.png").get_height() * 3))) for i in range(1, 7)]
+    toady_fire_projectile_images = [pygame.transform.scale(pygame.transform.flip(pygame.image.load(f"o{i}.png"), True, False), (int(pygame.image.load(f"o{i}.png").get_width() * 2), int(pygame.image.load(f"o{i}.png").get_height() * 2))) for i in range(1, 6)]
+    toady_water_projectile_images = [pygame.transform.scale(pygame.transform.flip(pygame.image.load(f"w{i}.png"), True, False), (int(pygame.image.load(f"w{i}.png").get_width() * 2), int(pygame.image.load(f"w{i}.png").get_height() * 2))) for i in range(1, 6)]
+    toady_earth_projectile_images = [pygame.transform.scale(pygame.transform.flip(pygame.image.load(f"z{i}.png"), True, False), (int(pygame.image.load(f"z{i}.png").get_width() * 2), int(pygame.image.load(f"z{i}.png").get_height() * 2))) for i in range(1, 6)]
 
 # Load projectile animation images for freddy (no flip needed)
-freddy_fire_projectile_images = [pygame.transform.scale(pygame.image.load(f"o{i}.png"), (int(pygame.image.load(f"o{i}.png").get_width() * 2), int(pygame.image.load(f"o{i}.png").get_height() * 3))) for i in range(1, 7)]
-freddy_water_projectile_images = [pygame.transform.scale(pygame.image.load(f"w{i}.png"), (int(pygame.image.load(f"w{i}.png").get_width() * 2), int(pygame.image.load(f"w{i}.png").get_height() * 3))) for i in range(1, 7)]
-freddy_earth_projectile_images = [pygame.transform.scale(pygame.image.load(f"z{i}.png"), (int(pygame.image.load(f"z{i}.png").get_width() * 2), int(pygame.image.load(f"z{i}.png").get_height() * 3))) for i in range(1, 7)]
+    freddy_fire_projectile_images = [pygame.transform.scale(pygame.image.load(f"o{i}.png"), (int(pygame.image.load(f"o{i}.png").get_width() * 2), int(pygame.image.load(f"o{i}.png").get_height() * 2))) for i in range(1, 6)]
+    freddy_water_projectile_images = [pygame.transform.scale(pygame.image.load(f"w{i}.png"), (int(pygame.image.load(f"w{i}.png").get_width() * 2), int(pygame.image.load(f"w{i}.png").get_height() * 2))) for i in range(1, 6)]
+    freddy_earth_projectile_images = [pygame.transform.scale(pygame.image.load(f"z{i}.png"), (int(pygame.image.load(f"z{i}.png").get_width() * 2), int(pygame.image.load(f"z{i}.png").get_height() * 2))) for i in range(1, 6)]
 
 # Frame counter for animation
 toady_frame = 0
@@ -270,6 +291,8 @@ def main():
                     x, y = event.pos
                     if SCREEN_WIDTH // 2 - play_img.get_width() // 2 - 200 <= x <= SCREEN_WIDTH // 2 - play_img.get_width() // 2 - 200 + play_img.get_width() and SCREEN_HEIGHT // 2 - play_img.get_height() // 2 <= y <= SCREEN_HEIGHT // 2 - play_img.get_height() // 2 + play_img.get_height():
                         game_started = True
+                        pygame.mixer.music.play(-1)  # Play the music in a loop
+                        load_game_assets()
                     if SCREEN_WIDTH // 2 - exit_img.get_width() // 2 + 200 <= x <= SCREEN_WIDTH // 2 - exit_img.get_width() // 2 + 200 + exit_img.get_width() and SCREEN_HEIGHT // 2 - exit_img.get_height() // 2 <= y <= SCREEN_HEIGHT // 2 - exit_img.get_height() // 2 + exit_img.get_height():
                         running = False
         else:
@@ -345,110 +368,113 @@ def main():
                                 freddy_fire_animation_active = False
                                 freddy_water_animation_active = False
 
-        # Draw health bars
-        player_health_text = FONT.render(f"Player Health: {player_health}", True, WHITE)
-        screen.blit(player_health_text, (50, 20))
+        if game_started:
+            # Draw health bars
+            player_health_text = FONT.render(f"Player Health: {player_health}", True, WHITE)
+            screen.blit(player_health_text, (50, 20))
 
-        enemy_health_text = FONT.render(f"Enemy Health: {enemy_health}", True, WHITE)
-        screen.blit(enemy_health_text, (SCREEN_WIDTH - 250, 20))
+            enemy_health_text = FONT.render(f"Enemy Health: {enemy_health}", True, WHITE)
+            screen.blit(enemy_health_text, (SCREEN_WIDTH - 250, 20))
 
         # Draw revealed element
         if revealed_element:
             reveal_text = FONT.render(f"Enemy Element: {revealed_element}", True, YELLOW)
             screen.blit(reveal_text, (SCREEN_WIDTH // 2 - 60, 250))
 
-        # Draw player and enemy images
-        player_y_pos = SCREEN_HEIGHT - 300  # Y position for the player
-        enemy_y_pos = SCREEN_HEIGHT - 300  # Y position for the enemy
+        if game_started:
+            # Draw player and enemy images
+            player_y_pos = SCREEN_HEIGHT - 300  # Y position for the player
+            enemy_y_pos = SCREEN_HEIGHT - 300  # Y position for the enemy
 
-        player_x_pos = 100  # X position for the player
-        enemy_x_pos = SCREEN_WIDTH - 350  # X position for the enemy
+            player_x_pos = 100  # X position for the player
+            enemy_x_pos = SCREEN_WIDTH - 350  # X position for the enemy
 
-        if player_health <= 0:
-            toady_death_animation_active = True
-            game_over = True
-            winner = "freddy"
-        if enemy_health <= 0:
-            freddy_death_animation_active = True
-            game_over = True
-            winner = "toady"
+            if player_health <= 0:
+                toady_death_animation_active = True
+                game_over = True
+                winner = "freddy"
+            if enemy_health <= 0:
+                freddy_death_animation_active = True
+                game_over = True
+                winner = "toady"
 
-        if toady_death_animation_active:
-            screen.blit(toady_death_images[toady_death_frame // 5], (player_x_pos, player_y_pos))
-            toady_death_frame += 1
-            if toady_death_frame // 5 >= len(toady_death_images):
-                toady_death_frame = 0
-                toady_death_animation_active = False
-                if winner == "freddy":
-                    lose_text = FONT.render("You Lose!", True, RED)
-                    screen.blit(lose_text, (SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT // 2))
-                    pygame.display.flip()
-                    pygame.time.delay(2000)
-                    running = False
-        elif fire_animation_active:
-            screen.blit(toady_af_images[toady_af_frame // 5], (player_x_pos, player_y_pos))
-            toady_af_frame += 1
-            if toady_af_frame // 5 >= len(toady_af_images):
-                toady_af_frame = 0
-                fire_animation_active = False
-        elif water_animation_active:
-            screen.blit(toady_aw_images[toady_aw_frame // 5], (player_x_pos, player_y_pos))
-            toady_aw_frame += 1
-            if toady_aw_frame // 5 >= len(toady_aw_images):
-                toady_aw_frame = 0
-                water_animation_active = False
-        elif earth_animation_active:
-            screen.blit(toady_ae_images[toady_ae_frame // 5], (player_x_pos, player_y_pos))
-            toady_ae_frame += 1
-            if toady_ae_frame // 5 >= len(toady_ae_images):
-                toady_ae_frame = 0
-                earth_animation_active = False
-        else:
-            screen.blit(toady_images[toady_frame // 5], (player_x_pos, player_y_pos))
-            toady_frame = (toady_frame + 1) % (len(toady_images) * 5)
+            if toady_death_animation_active:
+                screen.blit(toady_death_images[toady_death_frame // 5], (player_x_pos, player_y_pos))
+                toady_death_frame += 1
+                if toady_death_frame // 5 >= len(toady_death_images):
+                    toady_death_frame = 0
+                    toady_death_animation_active = False
+                    if winner == "freddy":
+                        lose_text = FONT.render("You Lose!", True, RED)
+                        screen.blit(lose_text, (SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT // 2))
+                        pygame.display.flip()
+                        pygame.time.delay(2000)
+                        running = False
+            elif fire_animation_active:
+                screen.blit(toady_af_images[toady_af_frame // 5], (player_x_pos, player_y_pos))
+                toady_af_frame += 1
+                if toady_af_frame // 5 >= len(toady_af_images):
+                    toady_af_frame = 0
+                    fire_animation_active = False
+            elif water_animation_active:
+                screen.blit(toady_aw_images[toady_aw_frame // 5], (player_x_pos, player_y_pos))
+                toady_aw_frame += 1
+                if toady_aw_frame // 5 >= len(toady_aw_images):
+                    toady_aw_frame = 0
+                    water_animation_active = False
+            elif earth_animation_active:
+                screen.blit(toady_ae_images[toady_ae_frame // 5], (player_x_pos, player_y_pos))
+                toady_ae_frame += 1
+                if toady_ae_frame // 5 >= len(toady_ae_images):
+                    toady_ae_frame = 0
+                    earth_animation_active = False
+            else:
+                screen.blit(toady_images[toady_frame // 5], (player_x_pos, player_y_pos))
+                toady_frame = (toady_frame + 1) % (len(toady_images) * 5)
 
-        if freddy_death_animation_active:
-            screen.blit(freddy_death_images[freddy_death_frame // 5], (enemy_x_pos, enemy_y_pos))
-            freddy_death_frame += 1
-            if freddy_death_frame // 5 >= len(freddy_death_images):
-                freddy_death_frame = 0
-                freddy_death_animation_active = False
-                if winner == "toady":
-                    win_text = FONT.render("You Win!", True, GREEN)
-                    screen.blit(win_text, (SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT // 2))
-                    pygame.display.flip()
-                    pygame.time.delay(2000)
-                    running = False
-        elif freddy_fire_animation_active:
-            screen.blit(freddy_af_images[freddy_af_frame // 5], (enemy_x_pos, enemy_y_pos))
-            freddy_af_frame += 1
-            if freddy_af_frame // 5 >= len(freddy_af_images):
-                freddy_af_frame = 0
-                freddy_fire_animation_active = False
-        elif freddy_water_animation_active:
-            screen.blit(freddy_aw_images[freddy_aw_frame // 5], (enemy_x_pos, enemy_y_pos))
-            freddy_aw_frame += 1
-            if freddy_aw_frame // 5 >= len(freddy_aw_images):
-                freddy_aw_frame = 0
-                freddy_water_animation_active = False
-        elif freddy_earth_animation_active:
-            screen.blit(freddy_ae_images[freddy_ae_frame // 5], (enemy_x_pos, enemy_y_pos))
-            freddy_ae_frame += 1
-            if freddy_ae_frame // 5 >= len(freddy_ae_images):
-                freddy_ae_frame = 0
-                freddy_earth_animation_active = False
-        else:
-            screen.blit(freddy_images_flipped[freddy_frame // 5], (enemy_x_pos, enemy_y_pos))
-            freddy_frame = (freddy_frame + 1) % (len(freddy_images_flipped) * 5)
+            if freddy_death_animation_active:
+                screen.blit(freddy_death_images[freddy_death_frame // 5], (enemy_x_pos, enemy_y_pos))
+                freddy_death_frame += 1
+                if freddy_death_frame // 5 >= len(freddy_death_images):
+                    freddy_death_frame = 0
+                    freddy_death_animation_active = False
+                    if winner == "toady":
+                        win_text = FONT.render("You Win!", True, GREEN)
+                        screen.blit(win_text, (SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT // 2))
+                        pygame.display.flip()
+                        pygame.time.delay(2000)
+                        running = False
+            elif freddy_fire_animation_active:
+                screen.blit(freddy_af_images[freddy_af_frame // 5], (enemy_x_pos, enemy_y_pos))
+                freddy_af_frame += 1
+                if freddy_af_frame // 5 >= len(freddy_af_images):
+                    freddy_af_frame = 0
+                    freddy_fire_animation_active = False
+            elif freddy_water_animation_active:
+                screen.blit(freddy_aw_images[freddy_aw_frame // 5], (enemy_x_pos, enemy_y_pos))
+                freddy_aw_frame += 1
+                if freddy_aw_frame // 5 >= len(freddy_aw_images):
+                    freddy_aw_frame = 0
+                    freddy_water_animation_active = False
+            elif freddy_earth_animation_active:
+                screen.blit(freddy_ae_images[freddy_ae_frame // 5], (enemy_x_pos, enemy_y_pos))
+                freddy_ae_frame += 1
+                if freddy_ae_frame // 5 >= len(freddy_ae_images):
+                    freddy_ae_frame = 0
+                    freddy_earth_animation_active = False
+            else:
+                screen.blit(freddy_images_flipped[freddy_frame // 5], (enemy_x_pos, enemy_y_pos))
+                freddy_frame = (freddy_frame + 1) % (len(freddy_images_flipped) * 5)
 
-        # Draw special cards
-        for i, card in enumerate(special_cards):
-            if not special_used[card.name]:
-                card.draw((SCREEN_WIDTH // 2 - 210) + i * 140, 20)
+        if game_started:
+            # Draw special cards
+            for i, card in enumerate(special_cards):
+                if not special_used[card.name]:
+                    card.draw((SCREEN_WIDTH // 2 - 210) + i * 140, 20)
 
-        # Draw elemental cards
-        for i, card in enumerate(player_deck):
-            card.draw((SCREEN_WIDTH // 2 - 210) + i * 140, SCREEN_HEIGHT - 220)
+            # Draw elemental cards
+            for i, card in enumerate(player_deck):
+                card.draw((SCREEN_WIDTH // 2 - 210) + i * 140, SCREEN_HEIGHT - 220)
 
         # Handle projectiles
         if player_projectile:
