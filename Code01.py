@@ -115,7 +115,7 @@ def load_game_assets():
     double_card_img = pygame.transform.scale(pygame.image.load("double.png"), (120, 180))
 
 # Load projectile animation images for toady and flip them horizontally
-<<<<<<< HEAD
+
     toady_fire_projectile_images = [pygame.transform.scale(pygame.transform.flip(pygame.image.load(f"o{i}.png"), True, False), (int(pygame.image.load(f"o{i}.png").get_width() * 2), int(pygame.image.load(f"o{i}.png").get_height() * 2))) for i in range(1, 6)]
     toady_water_projectile_images = [pygame.transform.scale(pygame.transform.flip(pygame.image.load(f"w{i}.png"), True, False), (int(pygame.image.load(f"w{i}.png").get_width() * 2), int(pygame.image.load(f"w{i}.png").get_height() * 2))) for i in range(1, 6)]
     toady_earth_projectile_images = [pygame.transform.scale(pygame.transform.flip(pygame.image.load(f"z{i}.png"), True, False), (int(pygame.image.load(f"z{i}.png").get_width() * 2), int(pygame.image.load(f"z{i}.png").get_height() * 2))) for i in range(1, 6)]
@@ -124,7 +124,6 @@ def load_game_assets():
     freddy_fire_projectile_images = [pygame.transform.scale(pygame.image.load(f"o{i}.png"), (int(pygame.image.load(f"o{i}.png").get_width() * 2), int(pygame.image.load(f"o{i}.png").get_height() * 2))) for i in range(1, 6)]
     freddy_water_projectile_images = [pygame.transform.scale(pygame.image.load(f"w{i}.png"), (int(pygame.image.load(f"w{i}.png").get_width() * 2), int(pygame.image.load(f"w{i}.png").get_height() * 2))) for i in range(1, 6)]
     freddy_earth_projectile_images = [pygame.transform.scale(pygame.image.load(f"z{i}.png"), (int(pygame.image.load(f"z{i}.png").get_width() * 2), int(pygame.image.load(f"z{i}.png").get_height() * 2))) for i in range(1, 6)]
-=======
     toady_fire_projectile_images = [pygame.transform.scale(pygame.transform.flip(pygame.image.load(f"o{i}.png"), True, False), (int(pygame.image.load(f"o{i}.png").get_width() * 2), int(pygame.image.load(f"o{i}.png").get_height() * 3))) for i in range(1, 7)]
     toady_water_projectile_images = [pygame.transform.scale(pygame.transform.flip(pygame.image.load(f"w{i}.png"), True, False), (int(pygame.image.load(f"w{i}.png").get_width() * 2), int(pygame.image.load(f"w{i}.png").get_height() * 3))) for i in range(1, 7)]
     toady_earth_projectile_images = [pygame.transform.scale(pygame.transform.flip(pygame.image.load(f"z{i}.png"), True, False), (int(pygame.image.load(f"z{i}.png").get_width() * 2), int(pygame.image.load(f"z{i}.png").get_height() * 3))) for i in range(1, 7)]
@@ -133,7 +132,6 @@ def load_game_assets():
     freddy_fire_projectile_images = [pygame.transform.scale(pygame.image.load(f"o{i}.png"), (int(pygame.image.load(f"o{i}.png").get_width() * 2), int(pygame.image.load(f"o{i}.png").get_height() * 3))) for i in range(1, 7)]
     freddy_water_projectile_images = [pygame.transform.scale(pygame.image.load(f"w{i}.png"), (int(pygame.image.load(f"w{i}.png").get_width() * 2), int(pygame.image.load(f"w{i}.png").get_height() * 3))) for i in range(1, 7)]
     freddy_earth_projectile_images = [pygame.transform.scale(pygame.image.load(f"z{i}.png"), (int(pygame.image.load(f"z{i}.png").get_width() * 2), int(pygame.image.load(f"z{i}.png").get_height() * 3))) for i in range(1, 7)]
->>>>>>> 374d77fc5a0480d56f3bd09175d5705bcf9664e3
 
 # Frame counter for animation
 toady_frame = 0
